@@ -9,11 +9,12 @@ import {
   useState,
 } from "react";
 
-export const AppInput = (
-  props: InputHTMLAttributes<HTMLInputElement> & {
-    handleSendMessageClick: (content: string) => void;
-  }
-) => {
+export const AppInput = ({
+  handleSendMessageClick,
+  ...props
+}: InputHTMLAttributes<HTMLInputElement> & {
+  handleSendMessageClick: (content: string) => void;
+}) => {
   const [input, setInput] = useState("");
   const refInput = useRef<HTMLInputElement>();
 
@@ -26,7 +27,7 @@ export const AppInput = (
 
   const onSendMessageClick = (e: any) => {
     e.preventDefault();
-    props.handleSendMessageClick(input);
+    handleSendMessageClick(input);
     setInput("");
   };
 

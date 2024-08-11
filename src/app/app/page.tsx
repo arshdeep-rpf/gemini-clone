@@ -44,7 +44,11 @@ const PromptCards = memo(function PromptCards({
 });
 
 const AppWelcomeScreenWithPropmpts = memo(
-  ({ onSelect }: { onSelect: (prompt: string) => void }) => {
+  function AppWelcomeScreenWithPropmpts({
+    onSelect,
+  }: {
+    onSelect: (prompt: string) => void;
+  }) {
     const { user } = useAuth();
     return (
       <div className="mx-auto pb-8 h-full overflow-auto">
@@ -78,7 +82,7 @@ export default function App() {
         });
       });
     },
-    [createChat]
+    [createChat, createMessage, router]
   );
 
   return (

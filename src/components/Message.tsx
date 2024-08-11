@@ -2,6 +2,7 @@ import { IMessage } from "@/types/message";
 import { memo } from "react";
 import ReactMarkdown from "react-markdown";
 import SyntaxHighlighter from "react-syntax-highlighter";
+import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 export const Message = memo(function Message({
   content,
@@ -26,18 +27,17 @@ export const Message = memo(function Message({
               const language =
                 match && match[1] !== "jsx" ? match[1] : "javascript";
 
-              console.log({ inline, match });
-
               return !inline && match ? (
                 <div className="py-2 overflow-auto">
                   <SyntaxHighlighter
-                    children={String(children).replace(/\n$/, "")}
                     // @ts-ignore
                     style={docco}
                     language={language}
                     PreTag="div"
                     {...props}
-                  />
+                  >
+                    {String(children).replace(/\n$/, "")}
+                  </SyntaxHighlighter>
                 </div>
               ) : (
                 <code className={className} {...props}>
@@ -46,8 +46,9 @@ export const Message = memo(function Message({
               );
             },
           }}
-          children={content.replace(/\\n/g, "\n")}
-        />
+        >
+          {content.replace(/\\n/g, "\n")}
+        </ReactMarkdown>
       </div>
     </div>
   );

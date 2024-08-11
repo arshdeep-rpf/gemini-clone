@@ -15,9 +15,6 @@ export default function AppChat({
   params: { chatId: string };
 }) {
   const parsedChatId = Number(chatId);
-  if (isNaN(parsedChatId)) {
-    return redirect("/app");
-  }
 
   const [messages, setMessages] = useState<Array<IMessage>>([]);
 
@@ -26,7 +23,6 @@ export default function AppChat({
     data: messagesData,
     isFetching: isMessagesLoading,
     status: getMessagesStatus,
-    ...rest
   } = useMessages({
     chatId: parsedChatId,
   });
@@ -35,17 +31,15 @@ export default function AppChat({
     if (messagesData.length > 0) {
       setMessages(messagesData);
     }
-  }, [messagesData.length]);
+  }, [messagesData]);
 
   const {
     mutateAsync: createMessage,
     isPending: isCreateMessageLoading,
     status: createMessageStatus,
   } = useCreateMessage();
-  console.log({ getMessagesStatus, createMessageStatus, ...rest });
 
   const isLoading = isMessagesLoading || isCreateMessageLoading;
-  console.log({ isLoading, isMessagesLoading });
 
   const scrollToEnd = () => {
     messagesContainerRef.current?.scrollIntoView?.({
@@ -53,6 +47,7 @@ export default function AppChat({
       block: "end",
     });
   };
+
   useEffect(() => {
     if (createMessageStatus === "success" || getMessagesStatus === "success") {
       setTimeout(scrollToEnd, 2000);
@@ -68,6 +63,10 @@ export default function AppChat({
       setMessages((messages) => [...messages, ...message]);
     });
   };
+
+  if (isNaN(parsedChatId)) {
+    return redirect("/app");
+  }
 
   return (
     <div className="flex flex-col justify-between mx-auto px-5 md:px-0 w-full h-full">

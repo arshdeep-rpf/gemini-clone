@@ -50,7 +50,6 @@ export const POST = async (
     );
   }
 
-  console.log({ chatId });
   try {
     const { content } = await req.json();
 

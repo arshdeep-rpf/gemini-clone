@@ -14,4 +14,5 @@ export const useMessages = ({ chatId }: { chatId: number }) =>
     initialData: [],
     queryKey: [`chats/${chatId}/messages`],
     queryFn: () => getMessages(chatId),
+    enabled: !isNaN(Number(chatId)),
   });
