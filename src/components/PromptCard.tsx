@@ -8,6 +8,7 @@ export const PromptCard = ({
   onClick: (prompt: string) => void;
 }) => (
   <div
+    data-testid="prompt-card"
     onClick={() => onClick(prompt)}
     className="flex flex-col justify-between bg-grey1 hover:bg-grey5 p-4 rounded-md w-[200px] min-w-[200px] h-[200px] cursor-pointer"
   >

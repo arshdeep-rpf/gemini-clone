@@ -1,7 +1,7 @@
 "use client";
 import ActivityIcon from "@/icons/activity.svg";
-import ArrowDownIcon from "@/icons/arrow-down.svg";
-import ChatIcon from "@/icons/chat.svg";
+
+import { useChats } from "@/hooks/useChats";
 import HamburgerIcon from "@/icons/hamburger.svg";
 import HelpIcon from "@/icons/help.svg";
 import PlusIcon from "@/icons/plus.svg";
@@ -9,8 +9,8 @@ import SettingIcon from "@/icons/setting.svg";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { twMerge } from "tailwind-merge";
-import { useChats } from "../hooks/useChats";
 import { Button } from "./Button";
+import { Chats } from "./Chats";
 
 const settingSectionItems = [
   {
@@ -21,43 +21,8 @@ const settingSectionItems = [
   { label: "Settings", Icon: SettingIcon },
 ];
 
-const Chats = ({ isNavOpen }: { isNavOpen: boolean }) => {
-  const { data: chats } = useChats();
-  const [showMore, setShowMore] = useState(false);
-
-  return (
-    <>
-      {chats.length > 0 && isNavOpen ? (
-        <div className="w-full h-full overflow-auto">
-          <p className="mb-2 ml-2 font-medium text-black/80 text-sm">Recent</p>
-          {chats.slice(0, showMore ? undefined : 5).map((chat) => (
-            <Link href={`/app/${chat.id}`} key={chat.id}>
-              <Button className="flex items-center gap-3 w-full animate-fadeIn">
-                <ChatIcon className="w-4 min-w-4 h-auto" />
-                <p className="font-medium text-ellipsis text-grey6 text-nowrap overflow-hidden">
-                  {chat.title}
-                </p>
-              </Button>
-            </Link>
-          ))}
-          {chats.length > 5 ? (
-            <Button
-              onClick={() => setShowMore((s) => !s)}
-              className="flex items-center gap-3 w-full animate-fadeIn"
-            >
-              <ArrowDownIcon
-                className={twMerge("w-4", showMore && "rotate-180")}
-              />
-              Show More
-            </Button>
-          ) : null}
-        </div>
-      ) : null}
-    </>
-  );
-};
-
 export function SideBar() {
+  const { data: chats } = useChats();
   const [isNavOpen, setIsNavOpen] = useState(true);
 
   const onHamBurgetButtonClicked = useCallback(() => {
@@ -89,7 +54,7 @@ export function SideBar() {
         </Link>
 
         {/* chats */}
-        <Chats isNavOpen={isNavOpen} />
+        <Chats isNavOpen={isNavOpen} chats={chats} />
 
         {/* help and settings section */}
         <div className="pb-4 min-h-fit">

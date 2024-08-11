@@ -61,6 +61,7 @@ export const AppInput = ({
             </button>
             {input ? (
               <button
+                data-testid="send-button"
                 type="submit"
                 onClick={onSendMessageClick}
                 style={{ transformOrigin: "50% 50%" }}
