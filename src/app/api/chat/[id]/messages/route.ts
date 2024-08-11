@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { prismaClient } from "../../../../../utils/prismaClient";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(150, "1 h"),
+  analytics: true,
+  prefix: "@upstash/ratelimit",
+});
 
 export const GET = async (
   req: NextRequest,
@@ -41,6 +50,17 @@ export const POST = async (
   req: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) => {
+  const identifier = req.ip || "user";
+
+  const { success } = await ratelimit.limit(identifier);
+  console.log({ identifier, success });
+
+  if (!success) {
+    return NextResponse.json(
+      { success, message: "Rate Limited" },
+      { status: 429 }
+    );
+  }
   const chatId = parseInt(id);
 
   if (isNaN(chatId)) {

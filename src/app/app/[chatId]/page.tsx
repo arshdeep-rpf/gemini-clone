@@ -23,9 +23,20 @@ export default function AppChat({
     data: messagesData,
     isFetching: isMessagesLoading,
     status: getMessagesStatus,
+    error,
+    isError,
   } = useMessages({
     chatId: parsedChatId,
   });
+
+  console.log({ error, isError });
+
+  useEffect(() => {
+    if (error?.message) {
+      alert(error?.message);
+      redirect("/app");
+    }
+  }, [error]);
 
   useEffect(() => {
     if (messagesData.length > 0) {
